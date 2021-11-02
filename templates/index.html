@@ -1,32 +1,70 @@
 <html>
-<head>
-<title>Chat Room</title>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-</head>
-<body>
-<script type="text/javascript">
-$(document).ready(function() {
+  <head>
+    <title>Global Chat Room</title>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <link
+      rel="icon"
+      href="https://img.icons8.com/fluency/48/000000/chat.png"
+      sizes="16x16"
+    />
 
-	var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+    <!--
+	Copying 
+-->
+    <link
+      rel="stylesheet"
+      href="{{url_for('static',filename='css/bootstrap.min.css')}}"
+    />
+  </head>
+  <style>
+    .container {
+      text-align: center;
+      margin-top: 4%;
+    }
+  </style>
+  <body>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        var socket = io.connect(
+          location.protocol + "//" + document.domain + ":" + location.port
+        );
 
-	socket.on('connect', function() {
-		socket.send('Anonymous user has been connected!');
-	});
+        socket.on("connect", function () {
+          socket.send("User has been connected!");
+        });
 
-	socket.on('message', function(msg) {
-		$("#messages").append('<li>'+msg+'</li>');
-	});
+        socket.on("message", function (msg) {
+          $("#messages").append(
+            '<span class="badge rounded-pill bg-primary">Anonymous: ' +
+              msg +
+              "</span><br><br>"
+          );
+        });
 
-	$('#sendbutton').on('click', function() {
-		socket.send($('#myMessage').val());
-		$('#myMessage').val('');
-	});
+        $("#sendbutton").on("click", function () {
+          socket.send($("#myMessage").val());
+          $("#myMessage").val("");
+        });
+      });
+    </script>
 
-});
-</script>
-<ul id="messages"></ul>
-<input type="text" id="myMessage">
-<button id="sendbutton">Send</button>
-</body>
-</html> 
+    <div class="container">
+      <button type="button" class="btn btn-outline-danger">
+        <h1>Global Chat Room</h1>
+      </button>
+      <br /><br />
+      <div class="card border-primary mb-3">
+        <br />
+        <ul id="messages"></ul>
+        <input type="text" id="myMessage" />
+        <button id="sendbutton" class="btn btn-outline-success">
+          Send Message
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
